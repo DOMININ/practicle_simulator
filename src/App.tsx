@@ -44,7 +44,7 @@ function ParticleSimulator() {
           type="text"
           // @ts-ignore
           onChange={(e) => setPracticlesCount(e.target.value)}
-          value={50}
+          value={practiclesCount}
         />
       </div>
       <canvas ref={canvasRef} width={800} height={600} />
