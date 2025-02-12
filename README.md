@@ -7,7 +7,7 @@ pnpm i
 pnpm run dev
 ```
 
-[example](https://github.com/trof808/practicle_simulator/blob/main/demo.gif)
+![example](https://github.com/trof808/practicle_simulator/blob/main/demo.gif)
 
 ## Решить проблему частоты обновления рендера
 
