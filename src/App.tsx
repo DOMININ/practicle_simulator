@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { drawParticles } from './drawPracticle';
-import { simulate } from './simulation';
 import { generateParticles } from './generatePracticle';
 import './App.css';
 
@@ -9,26 +8,33 @@ function ParticleSimulator() {
   const [practiclesCount, setPracticlesCount] = useState(100);
   const [particles, setParticles] = useState(generateParticles(10));
   const particleHistory = useRef<{ x: number; y: number }[][]>([]);
+  const workerRef = useRef<Worker | null>(null);
 
   useEffect(() => {
     setParticles(generateParticles(practiclesCount));
   }, [practiclesCount]);
 
+  // TODO: возможно через setTimeout
   useEffect(() => {
     const ctx = canvasRef?.current?.getContext('2d');
-    if (!!ctx) {
-      const animate = () => {
-        simulate(particles);
-        particleHistory.current.push(
-          particles.map((p) => ({ x: p.x, y: p.y })),
-        );
 
-        drawParticles(ctx, particles);
-        requestAnimationFrame(animate);
-      };
+    if (!ctx) return;
 
-      animate();
-    }
+    workerRef.current = new Worker(
+      new URL('./simulationWorker.ts', import.meta.url),
+    );
+
+    workerRef.current.postMessage(particles);
+
+    workerRef.current.onmessage = (event) => {
+      setParticles(event.data);
+      drawParticles(ctx, event.data);
+      requestAnimationFrame(() => workerRef.current?.postMessage(particles));
+    };
+
+    return () => {
+      workerRef.current?.terminate();
+    };
   }, [particles]);
 
   const handleSendHistory = () => {
