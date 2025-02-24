@@ -41,6 +41,7 @@ https://devtoolstips.org/tips/en/display-current-framerate/
 Тут есть два пути, можно оба реализовать. Либо оптимизировать алгоритм пересчета. Либо освободить основной поток от тяжелых операций, чтобы ускорить рендеринг
 
 https://developer.chrome.com/docs/devtools/performance?hl=ru
+https://macarthur.me/posts/long-tasks/
 
 ## 3. Найти утечку памяти
 
